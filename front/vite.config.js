@@ -64,6 +64,7 @@ export default defineConfig({
   base: "/",
   server: {
     port: port,
+    allowedHosts: ["front", "localhost"],
     open: false,
   },
   preview: {

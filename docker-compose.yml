@@ -2,24 +2,98 @@ services:
   front:
     image: chat-ai-front:latest
     build: ./front
-    network_mode: "host"
+    # network_mode: "host"
     volumes:
       - ./front:/usr/src/app
       - /usr/src/app/node_modules
     secrets:
       - front
     restart: on-failure
+    ports:
+      - 8080:8080
 
   back:
     image: chat-ai-back:latest
     build: ./back
-    network_mode: "host"
+    # network_mode: "host"
     volumes:
       - ./back:/usr/src/app
       - /usr/src/app/node_modules
     secrets:
       - back
     restart: on-failure
+    ports:
+      - 8081:8081
+
+
+  apache: 
+    image: chat-ai-apache:latest
+    build: ./apache
+    # network_mode: "host"
+#    secrets:
+#      - back
+    restart: on-failure
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - TZ=Europe/Berlin
+    hostname:  chat-ai.dev.sonia.de
+    volumes:
+      # source code
+      - ./apache:/var/www/html
+
+
+  keycloak:
+    # container_name: keycloak
+    ports:
+      - "7080:8080"
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloakdb:5433/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_PORT: 7080
+      KC_HOSTNAME_STRICT: true
+      KC_HOSTNAME_STRICT_HTTPS: true
+
+      KC_LOG_LEVEL: info
+      KC_METRICS_ENABLED: true
+      KC_HEALTH_ENABLED: true
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    image: 'quay.io/keycloak/keycloak:24.0.4'
+    # command: start --import-realm
+    command: start-dev --import-realm --log-level=info --proxy=passthrough
+    # command: start-dev --log-level=info
+    volumes:
+      - ./apache:/opt/keycloak/data/import
+    depends_on:
+      keycloakdb:
+        condition: service_healthy
+        restart: true
+
+  keycloakdb:
+    image: postgres:17
+ #   volumes:
+ #     - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      PGPORT: 5433
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 10s
+
+
+
 
 secrets:
   front:
