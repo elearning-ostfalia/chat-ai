@@ -1,0 +1,54 @@
+services:
+  front:
+    image: chat-ai-front:latest
+    build: ./front
+    # network_mode: "host"
+    volumes:
+      - ./front:/usr/src/app
+      - /usr/src/app/node_modules
+    secrets:
+      - front
+    restart: on-failure
+#    ports:
+#      - 8080:8080
+
+  back:
+    image: chat-ai-back:latest
+    build: ./back
+    # network_mode: "host"
+    volumes:
+      - ./back:/usr/src/app
+      - /usr/src/app/node_modules
+    secrets:
+      - back
+    restart: on-failure
+    ports:
+      - 8081:8081
+
+
+  apache: 
+    image: chat-ai-apache:latest
+    build: 
+      context: ./apache-prod
+      args: 
+        SERVER_NAME: chat-ai.ostfalia.de
+        
+    # network_mode: "host"
+    restart: on-failure
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - TZ=Europe/Berlin
+    hostname:  chat-ai.dev.sonia.de
+    volumes:
+      # source code
+      - ./apache:/var/www/html
+
+
+
+secrets:
+  front:
+    file: ./secrets/front.json
+  back:
+    file: ./secrets/back.json
