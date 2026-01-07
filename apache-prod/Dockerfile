@@ -30,7 +30,6 @@ RUN a2enmod rewrite && \
 #RUN docker-php-ext-install pcntl
 #RUN docker-php-ext-configure pcntl --enable-pcntl
 
-
 #RUN apt-get update && apt-get install -y libzip-dev zip libicu-dev libpq-dev && docker-php-ext-install zip
 
 # Copy the custom Apache virtual host config
