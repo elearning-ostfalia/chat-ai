@@ -32,7 +32,7 @@ services:
       context: ./apache-prod
       args: 
         SERVER_NAME: chat-ai.ostfalia.de
-        
+
     # network_mode: "host"
     restart: on-failure
     ports:
@@ -43,9 +43,9 @@ services:
     hostname:  chat-ai.dev.sonia.de
     volumes:
       # source code
-      - ./apache:/var/www/html
-
-
+      - ./apache-prod:/var/www/html
+      # ssl certificate
+      - ./apache:/etc/ssl/certs
 
 secrets:
   front:

@@ -33,12 +33,6 @@ RUN a2enmod rewrite && \
 
 #RUN apt-get update && apt-get install -y libzip-dev zip libicu-dev libpq-dev && docker-php-ext-install zip
 
-
-# Copy SSL certificate and key
-# TODO...
-COPY chat-ai-dev.crt /etc/ssl/certs/chat-ai-dev.crt
-COPY chat-ai-dev.key /etc/ssl/private/chat-ai-dev.key
-
 # Copy the custom Apache virtual host config
 COPY ./httpd-vhosts.conf /etc/apache2/sites-available/apache-ssl.conf
 RUN sed -i "s/@@SERVERNAME@@/${SERVER_NAME}/" /etc/apache2/sites-available/apache-ssl.conf
