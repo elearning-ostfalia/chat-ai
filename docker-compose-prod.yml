@@ -49,6 +49,7 @@ services:
       - ./apache-prod:/var/www/html
       # ssl certificate
       - ./apache:/etc/ssl/certs
+      - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt
 
 secrets:
   front:
