@@ -32,6 +32,9 @@ services:
       context: ./apache-prod
       args: 
         SERVER_NAME: chat-ai.ostfalia.de
+        OIDC_PROVIDER: "https://keycloak/realms/chatai-realm"
+        OIDC_CLIENT_ID: clientid
+        OIDC_SECRET:    secret
 
     # network_mode: "host"
     restart: on-failure

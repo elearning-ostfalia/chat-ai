@@ -5,6 +5,9 @@ RUN echo "Europe/Berlin" > /etc/timezone && dpkg-reconfigure -f noninteractive t
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html
 ARG SERVER_NAME          "hostname.domain.org"
+ARG OIDC_PROVIDER        "https://keycloak/realms/chatai-realm"
+ARG OIDC_CLIENT_ID       "clientid"
+ARG OIDC_SECRET          "secret"
 
 
 # install for debugging (remove when running)
@@ -34,7 +37,10 @@ RUN a2enmod rewrite && \
 
 # Copy the custom Apache virtual host config
 COPY ./httpd-vhosts.conf /etc/apache2/sites-available/apache-ssl.conf
-RUN sed -i "s/@@SERVERNAME@@/${SERVER_NAME}/" /etc/apache2/sites-available/apache-ssl.conf
+RUN sed -i "s|@@OIDC_CLIENT_ID@@|${OIDC_CLIENT_ID}|" /etc/apache2/sites-available/apache-ssl.conf
+RUN sed -i "s|@@OIDC_SECRET@@|${OIDC_SECRET}|" /etc/apache2/sites-available/apache-ssl.conf
+RUN sed -i "s|@@SERVERNAME@@|${SERVER_NAME}|" /etc/apache2/sites-available/apache-ssl.conf 
+RUN sed -i "s|@@OIDC_PROVIDER@@|${OIDC_PROVIDER}|" /etc/apache2/sites-available/apache-ssl.conf
 
 RUN a2dissite 000-default default-ssl && a2ensite apache-ssl
 
