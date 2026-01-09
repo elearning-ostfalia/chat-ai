@@ -188,7 +188,7 @@ export default function SidebarContent({
       <div>
           <div className="flex items-center justify-between">
                 <img
-                    className="h-10"
+                    className="h-20 m-1 p-1"
                     src={ostfalia_logo}
                     alt="Ostfalia Logo"
                 />
