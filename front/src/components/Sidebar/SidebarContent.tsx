@@ -14,6 +14,7 @@ import { useConversationList } from "../../db";
 import { useModal } from "../../modals/ModalContext";
 
 import Logo from "../../assets/logos/chat_ai.svg";
+import ostfalia_logo from "../../assets/logos/ostfalia.svg";
 
 import { toggleSidebar } from "../../Redux/reducers/interfaceSettingsSlice";
 
@@ -183,6 +184,16 @@ export default function SidebarContent({
         WebkitTapHighlightColor: "transparent",
       }}
     >
+      {/* Ostfalia logo */}
+      <div>
+          <div className="flex items-center justify-between">
+                <img
+                    className="h-10"
+                    src={ostfalia_logo}
+                    alt="Ostfalia Logo"
+                />
+          </div>
+      </div>
       {/* Header with close button */}
       <div className="flex items-center justify-between">
         <AiServicesMenu />
