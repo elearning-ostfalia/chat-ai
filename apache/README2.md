@@ -1,7 +1,18 @@
 Starten: 
 
-* 
+* Im Verzeichnis secrets müssen die Dateien front.json und back.json erzeugt werden. 
 
+* Docker images holen bzw. bauen: docker compose build 
+
+* Docker Container starten: docker compose up
+
+* Im Browser: https://chat-ai.dev.sonia.de
+
+Dazu muss chat-ai.dev.sonia.de in der /etc/hosts eingetragen werden. 
+Nutzer ist dann user1/user
+
+
+Änderungen, falls nötig:
 
 * create self signed certificate: 
 
